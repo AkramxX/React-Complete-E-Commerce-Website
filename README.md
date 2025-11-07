@@ -8,7 +8,7 @@ A fully-featured, responsive e-commerce application built with React. Features i
 
 - 🛒 **Dynamic Product Catalog** - Browse and filter products by category (Accessories, Bags, Electronics, Clothing)
 - 🛍️ **Smart Shopping Cart** - Slide-out cart menu with quantity controls and real-time totals
-- 💳 **Multi-Step Checkout** - Professional checkout flow with Formik validation and Stripe integration
+- 💳 **Multi-Step Checkout** - Professional checkout flow with Formik validation 
 - 📱 **Fully Responsive** - Optimized for desktop, tablet, and mobile devices
 - 🎨 **Modern UI/UX** - Material-UI components with smooth animations and carousels
 - ⚡ **Redux State Management** - Centralized state for cart and products with Redux Toolkit
@@ -26,5 +26,5 @@ A fully-featured, responsive e-commerce application built with React. Features i
 
 ✅ **Production-Ready** - Clean, modular architecture with proper separation of concerns  
 ✅ **Modern React** - Functional components, hooks, and Redux Toolkit best practices  
-✅ **Professional UI** - Polished Material-UI interface with responsive . design  
+✅ **Professional UI** - Polished Material-UI interface with responsive design  
 ✅ **Form Validation** - Robust validation with Formik and Yup schemas
