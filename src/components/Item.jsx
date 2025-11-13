@@ -58,7 +58,7 @@ const Item = ({ item, width }) => {
             </Box>
             <Button
               onClick={() => {
-                dispatch(addToCart({ item: { ...item, count } }));
+                dispatch(addToCart({ item: { ...item, count, image: images[0] } }));
               }}
               sx={{
                 backgroundColor: shades.primary[300],
