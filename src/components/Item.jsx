@@ -16,7 +16,7 @@ const Item = ({ item, width }) => {
     palette: { neutral },
   } = useTheme();
 
-  const { category, price, name, image } = item;
+  const { category, price, name, images } = item;
 
   return (
     <Box width={width}>
@@ -29,7 +29,7 @@ const Item = ({ item, width }) => {
           alt={item.name}
           width="300px"
           height="400px"
-          src={image}
+          src={images[0]}
           onClick={() => navigate(`/item/${item.id}`)}
           style={{ cursor: "pointer", objectFit: "cover" }}
         />

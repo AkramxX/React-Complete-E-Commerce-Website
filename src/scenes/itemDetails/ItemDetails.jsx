@@ -1,4 +1,14 @@
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Typography,
+  Breadcrumbs,
+  Link as MuiLink,
+  Chip,
+  Grid,
+  Rating,
+} from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useParams } from "react-router-dom";
@@ -10,6 +20,7 @@ import { shades } from "../../theme";
 import { addToCart } from "../../state";
 import { useDispatch } from "react-redux";
 import { products } from "../../data/products";
+import { Link } from "react-router-dom";
 
 const ItemDetails = () => {
   const dispatch = useDispatch();
@@ -18,6 +29,7 @@ const ItemDetails = () => {
   const [count, setCount] = useState(1);
   const [item, setItem] = useState(null);
   const [items, setItems] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -28,6 +40,7 @@ const ItemDetails = () => {
     const foundItem = products.find((product) => product.id === parseInt(itemId));
     if (foundItem) {
       setItem(foundItem);
+      setSelectedImage(foundItem.images?.[0] ?? null);
     }
 
     // Get related items (different from current item)
@@ -37,108 +50,183 @@ const ItemDetails = () => {
     setItems(relatedItems);
   }, [itemId]);
 
+  // reset selected image whenever item changes
+  useEffect(() => {
+    setSelectedImage(item?.images?.[0] ?? null);
+  }, [item]);
+
+  const formatPrice = (priceCents) =>
+    new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(
+      (priceCents || 0) / 100
+    );
+
   return (
-    <Box width="80%" m="80px auto">
-      <Box display="flex" flexWrap="wrap" columnGap="40px">
-        {/* IMAGES */}
-        <Box flex="1 1 40%" mb="40px">
-          <img
-            alt={item?.name}
-            width="100%"
-            height="100%"
-            src={item?.image}
-            style={{ objectFit: "contain" }}
-          />
-        </Box>
+    <Box width="85%" m="48px auto">
+      <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 2 }}>
+        <MuiLink component={Link} to="/" underline="hover" color="inherit">
+          Home
+        </MuiLink>
+        <MuiLink component={Link} to="/" underline="hover" color="inherit">
+          Shop
+        </MuiLink>
+        <Typography color="text.primary">{item?.name}</Typography>
+      </Breadcrumbs>
 
-        {/* ACTIONS */}
-        <Box flex="1 1 50%" mb="40px">
-          <Box display="flex" justifyContent="space-between">
-            <Box>Home/Item</Box>
-            <Box>Prev Next</Box>
-          </Box>
-
-          <Box m="65px 0 25px 0">
-            <Typography variant="h3">{item?.name}</Typography>
-            <Typography>${(item?.price / 100).toFixed(2)}</Typography>
-            <Typography sx={{ mt: "20px" }}>
-              {item?.longDescription || item?.shortDescription}
-            </Typography>
-          </Box>
-
-          <Box display="flex" alignItems="center" minHeight="50px">
+      <Grid container spacing={4}>
+        <Grid item xs={12} md={6}>
+          <Box
+            sx={{
+              border: `1px solid ${shades.neutral[300]}`,
+              borderRadius: 2,
+              p: 2,
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              gap: 1,
+              background: "#fff",
+            }}
+          >
             <Box
-              display="flex"
-              alignItems="center"
-              border={`1.5px solid ${shades.neutral[300]}`}
-              mr="20px"
-              p="2px 5px"
-            >
-              <IconButton onClick={() => setCount(Math.max(count - 1, 1))}>
-                <RemoveIcon />
-              </IconButton>
-              <Typography sx={{ p: "0 5px" }}>{count}</Typography>
-              <IconButton onClick={() => setCount(count + 1)}>
-                <AddIcon />
-              </IconButton>
-            </Box>
-            <Button
               sx={{
-                backgroundColor: ["#292626ff"],
-                "&:hover": { backgroundColor: "#000" },
-                color: "white",
-                borderRadius: 0,
-                minWidth: "150px",
-                padding: "10px 40px",
+                flex: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                p: 2,
               }}
-              onClick={() => dispatch(addToCart({ item: { ...item, count } }))}
             >
-              ADD TO CART
-            </Button>
+              <img
+                alt={item?.name}
+                src={selectedImage ?? item?.images?.[0]}
+                style={{ maxWidth: "100%", maxHeight: 420, objectFit: "contain" }}
+              />
+            </Box>
+
+            <Box display="flex" gap={1} justifyContent="center" flexWrap="wrap">
+              {(item?.images || []).map((src, idx) => {
+                const isSelected = src === selectedImage;
+                return (
+                  <Box
+                    key={idx}
+                    onClick={() => setSelectedImage(src)}
+                    sx={{
+                      width: 72,
+                      height: 72,
+                      border: isSelected ? `2px solid ${shades.primary[500]}` : `1px solid ${shades.neutral[200]}`,
+                      borderRadius: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      overflow: "hidden",
+                      background: "#fafafa",
+                      cursor: "pointer",
+                      boxShadow: isSelected ? "0 0 0 2px rgba(25,118,210,0.08)" : "none",
+                    }}
+                  >
+                    <img src={src} alt={`${item?.name}-${idx}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  </Box>
+                );
+              })}
+            </Box>
           </Box>
-          <Box>
-            <Box m="20px 0 5px 0" display="flex">
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <Typography variant="h4" fontWeight={700}>
+              {item?.name}
+            </Typography>
+
+            <Box display="flex" alignItems="center" gap={2}>
+              <Typography variant="h5" color="primary" fontWeight={700}>
+                {formatPrice(item?.price)}
+              </Typography>
+              <Rating value={item?.rating || 4} precision={0.5} readOnly size="small" />
+              <Chip label={item?.category} size="small" />
+            </Box>
+
+            <Typography color="text.secondary">{item?.shortDescription}</Typography>
+
+            <Box display="flex" alignItems="center" gap={2}>
+              <Box
+                display="flex"
+                alignItems="center"
+                border={`1px solid ${shades.neutral[300]}`}
+                p="2px 6px"
+                borderRadius={1}
+              >
+                <IconButton size="small" onClick={() => setCount(Math.max(count - 1, 1))}>
+                  <RemoveIcon fontSize="small" />
+                </IconButton>
+                <Typography sx={{ px: 1 }}>{count}</Typography>
+                <IconButton size="small" onClick={() => setCount(count + 1)}>
+                  <AddIcon fontSize="small" />
+                </IconButton>
+              </Box>
+
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ borderRadius: 0, minWidth: 160, px: 3 }}
+                onClick={() =>
+                  dispatch(
+                    addToCart({
+                     item: {
+                        ...item,
+                        count,
+                        // include a single image property for the cart UI (use currently selected big image)
+                        image: selectedImage ?? item?.images?.[0] ?? null,
+                      },
+                    })
+                  )
+                }
+              >
+                Add to cart
+              </Button>
+
               
             </Box>
-            <Typography>CATEGORIE: {item?.category}</Typography>
+
+            <Box>
+              <Typography variant="body2" sx={{ mt: 1 }}>
+                {item?.longDescription}
+              </Typography>
+            </Box>
           </Box>
-        </Box>
-      </Box>
+        </Grid>
+      </Grid>
 
       {/* INFORMATION */}
-      <Box m="20px 0">
-        <Tabs value={value} onChange={handleChange}>
+      <Box m="28px 0">
+        <Tabs value={value} onChange={handleChange} textColor="primary" indicatorColor="primary">
           <Tab label="DESCRIPTION" value="description" />
           <Tab label="REVIEWS" value="reviews" />
         </Tabs>
       </Box>
+
       <Box display="flex" flexWrap="wrap" gap="15px">
         {value === "description" && (
-          <div>{item?.longDescription || item?.shortDescription}</div>
+          <Box sx={{ width: "100%" }}>{item?.longDescription || item?.shortDescription}</Box>
         )}
         {value === "reviews" && (
-          <div>
+          <Box sx={{ width: "100%" }}>
             <Typography>No reviews yet. This is a demo version.</Typography>
-          </div>
+          </Box>
         )}
       </Box>
 
       {/* RELATED ITEMS */}
       <Box mt="50px" width="100%">
-        <Typography variant="h3" fontWeight="bold">
+        <Typography variant="h5" fontWeight="bold">
           Related Products
         </Typography>
-        <Box
-          mt="20px"
-          display="flex"
-          flexWrap="wrap"
-          columnGap="1.33%"
-          justifyContent="space-between"
-        >
-          {items.map((item, i) => (
-            <Item key={`${item.name}-${i}`} item={item} />
+        <Grid container spacing={2} sx={{ mt: 1 }}>
+          {items.map((related, i) => (
+            <Grid key={`${related.name}-${i}`} item xs={6} sm={4} md={3}>
+              <Item item={related} />
+            </Grid>
           ))}
-        </Box>
+        </Grid>
       </Box>
     </Box>
   );

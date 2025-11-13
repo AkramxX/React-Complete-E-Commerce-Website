@@ -126,6 +126,7 @@ const CartMenu = () => {
               <Typography fontWeight="bold">${(totalPrice / 100).toFixed(2)}</Typography>
             </FlexBox>
             <Button
+              
               sx={{
                 backgroundColor: shades.primary[400],
                 "&:hover": { backgroundColor: "#000" },
@@ -139,6 +140,7 @@ const CartMenu = () => {
                 navigate("/checkout");
                 dispatch(setIsCartOpen({}));
               }}
+              disabled={cart.length === 0}
             >
               CHECKOUT
             </Button>
