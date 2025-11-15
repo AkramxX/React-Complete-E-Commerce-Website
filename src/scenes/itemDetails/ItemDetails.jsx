@@ -222,7 +222,7 @@ const ItemDetails = () => {
         </Typography>
         <Grid container spacing={2} sx={{ mt: 1 }}>
           {items.map((related, i) => (
-            <Grid key={`${related.name}-${i}`} item xs={6} sm={4} md={3}>
+            <Grid key={`${related.name}-${i}`} item xs={12} sm={12} md={6} lg={3}>
               <Item item={related} />
             </Grid>
           ))}

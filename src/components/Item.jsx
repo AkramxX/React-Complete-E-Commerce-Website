@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { IconButton, Box, Typography, useTheme, Button } from "@mui/material";
+import { IconButton, Box, Typography, useTheme, Button, useMediaQuery } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { shades } from "../theme";
@@ -15,8 +15,10 @@ const Item = ({ item, width }) => {
   const {
     palette: { neutral },
   } = useTheme();
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   const { category, price, name, images } = item;
+  const showControls = isHovered || isMobile;
 
   return (
     <Box width={width}>
@@ -25,21 +27,27 @@ const Item = ({ item, width }) => {
         onMouseOver={() => setIsHovered(true)}
         onMouseOut={() => setIsHovered(false)}
       >
-        <img
+        <Box
+          component="img"
           alt={item.name}
-          width="300px"
-          height="400px"
-          src={images[0]}
+          src={images?.[0]}
           onClick={() => navigate(`/item/${item.id}`)}
-          style={{ cursor: "pointer", objectFit: "cover" }}
+          sx={{
+            width: "100%",
+            height: { xs: 240, sm: 320, md: 400 },
+            objectFit: "cover",
+            cursor: "pointer",
+            borderRadius: 1,
+            display: "block",
+          }}
         />
         <Box
-          display={isHovered ? "block" : "none"}
+          display={showControls ? "block" : "none"}
           position="absolute"
-          bottom="10%"
+          bottom={{ xs: "4%", sm: "10%" }}
           left="0"
           width="100%"
-          padding="0 5%"
+          px={{ xs: 2, sm: "5%" }}
         >
           <Box display="flex" justifyContent="space-between">
             <Box
@@ -64,6 +72,9 @@ const Item = ({ item, width }) => {
                 backgroundColor: shades.primary[300],
                 color: "white",
                 "&:hover": { backgroundColor: "#000" },
+                px: { xs: 1.5, sm: 2.5 },
+                py: { xs: 0.5, sm: 1 },
+                fontSize: { xs: "0.75rem", sm: "0.875rem" },
               }}
             >
               Add to Cart
