@@ -11,20 +11,20 @@ A fully-featured, responsive e-commerce application built with React. Features i
 - 💳 **Multi-Step Checkout** - Professional checkout flow with Formik validation 
 - 📱 **Fully Responsive** - Optimized for desktop, tablet, and mobile devices
 - 🎨 **Modern UI/UX** - Material-UI components with smooth animations and carousels
-- ⚡ **Redux State Management** - Centralized state for cart and products with Redux Toolkit
+- ⚡ **Zustand State Management** - Centralized state for cart and products with Zustand
 
 ---
 
 ## 🚀 Tech Stack
 
 **Frontend:** React 18.2 • React Router DOM 6.3  
-**State Management:** Redux Toolkit 1.8 • React Redux 8.0  
+**State Management:** Zustand 4.1  
 **UI Framework:** Material-UI 5.10 • Emotion • MUI Icons  
 **Forms & Validation:** Formik 2.2 • Yup 0.32
 
 ## 🎯 Project Highlights
 
 ✅ **Production-Ready** - Clean, modular architecture with proper separation of concerns  
-✅ **Modern React** - Functional components, hooks, and Redux Toolkit best practices  
+✅ **Modern React** - Functional components, hooks, and Zustand best practices  
 ✅ **Professional UI** - Polished Material-UI interface with responsive design  
 ✅ **Form Validation** - Robust validation with Formik and Yup schemas
