@@ -1,63 +1,51 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {create} from "zustand";
 
-const initialState = {
+// Zustand store replacing the previous Redux Toolkit slice.
+export const useCartStore = create((set) => ({
   isCartOpen: false,
   cart: [],
   items: [],
-};
 
-export const cartSlice = createSlice({
-  name: "cart",
-  initialState,
-  reducers: {
-    setItems: (state, action) => {
-      state.items = action.payload;
-    },
+  // sets available items (product list)
+  setItems: (items) => set(() => ({ items })),
 
-    addToCart: (state, action) => {
-      const existingItem = state.cart.find((item) => item.id === action.payload.item.id);
-      if (existingItem) {
-        existingItem.count++;
-      } else {
-        state.cart = [...state.cart, action.payload.item];
+  // add item to cart; expects an item object (with id, price, etc.)
+  addToCart: (item) =>
+    set((state) => {
+      const existing = state.cart.find((i) => i.id === item.id);
+      if (existing) {
+        return {
+          cart: state.cart.map((i) =>
+            i.id === item.id ? { ...i, count: (i.count || 1) + 1 } : i
+          ),
+        };
       }
-    },
+      return { cart: [...state.cart, { ...item, count: item.count || 1 }] };
+    }),
 
-    removeFromCart: (state, action) => {
-      state.cart = state.cart.filter((item) => item.id !== action.payload.id);
-    },
+  removeFromCart: (id) =>
+    set((state) => ({ cart: state.cart.filter((i) => i.id !== id) })),
 
-    increaseCount: (state, action) => {
-      state.cart = state.cart.map((item) => {
-        if (item.id === action.payload.id) {
-          item.count++;
-        }
-        return item;
-      });
-    },
+  increaseCount: (id) =>
+    set((state) => ({
+      cart: state.cart.map((i) => (i.id === id ? { ...i, count: (i.count || 1) + 1 } : i)),
+    })),
 
-    decreaseCount: (state, action) => {
-      state.cart = state.cart.map((item) => {
-        if (item.id === action.payload.id && item.count > 1) {
-          item.count--;
-        }
-        return item;
-      });
-    },
+  decreaseCount: (id) =>
+    set((state) => ({
+      cart: state.cart.map((i) => (i.id === id && i.count > 1 ? { ...i, count: i.count - 1 } : i)),
+    })),
 
-    setIsCartOpen: (state) => {
-      state.isCartOpen = !state.isCartOpen;
-    },
-  },
-});
+  setIsCartOpen: () => set((state) => ({ isCartOpen: !state.isCartOpen })),
+}));
 
-export const {
-  setItems,
-  addToCart,
-  removeFromCart,
-  increaseCount,
-  decreaseCount,
-  setIsCartOpen,
-} = cartSlice.actions;
+// Convenience wrappers so existing imports like `import { addToCart } from "../state"`
+// can remain valid and be called directly (without dispatch).
+export const setItems = (items) => useCartStore.getState().setItems(items);
+export const addToCart = (item) => useCartStore.getState().addToCart(item);
+export const removeFromCart = (id) => useCartStore.getState().removeFromCart(id);
+export const increaseCount = (id) => useCartStore.getState().increaseCount(id);
+export const decreaseCount = (id) => useCartStore.getState().decreaseCount(id);
+export const setIsCartOpen = () => useCartStore.getState().setIsCartOpen();
 
-export default cartSlice.reducer;
+export default useCartStore;

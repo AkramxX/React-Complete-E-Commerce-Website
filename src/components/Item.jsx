@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { IconButton, Box, Typography, useTheme, Button, useMediaQuery } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -9,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 
 const Item = ({ item, width }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [count, setCount] = useState(1);
   const [isHovered, setIsHovered] = useState(false);
   const {
@@ -64,9 +62,9 @@ const Item = ({ item, width }) => {
                 <AddIcon />
               </IconButton>
             </Box>
-            <Button
+              <Button
               onClick={() => {
-                dispatch(addToCart({ item: { ...item, count, image: images[0] } }));
+                addToCart({ ...item, count, image: images[0] });
               }}
               sx={{
                 backgroundColor: shades.primary[300],

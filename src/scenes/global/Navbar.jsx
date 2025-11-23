@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useCartStore, setIsCartOpen } from "../../state";
 import { Badge, Box, IconButton } from "@mui/material";
 import {
   PersonOutline,
@@ -8,12 +8,11 @@ import {
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { shades } from "../../theme";
-import { setIsCartOpen } from "../../state";
+
 
 function Navbar() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart.cart);
+  const cart = useCartStore((state) => state.cart);
 
   return (
     <Box
@@ -69,7 +68,7 @@ function Navbar() {
             }}
           >
             <IconButton
-              onClick={() => dispatch(setIsCartOpen({}))}
+              onClick={() => setIsCartOpen()}
               sx={{ color: "black" }}
             >
               <ShoppingBagOutlined />

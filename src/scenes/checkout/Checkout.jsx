@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useCartStore } from "../../state";
 import { Box, Button, Stepper, Step, StepLabel, Alert } from "@mui/material";
 import { Formik } from "formik";
 import { useState } from "react";
@@ -12,7 +12,7 @@ const Checkout = () => {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   // eslint-disable-next-line
-  const cart = useSelector((state) => state.cart.cart);
+  const cart = useCartStore((state) => state.cart);
   const isFirstStep = activeStep === 0;
   const isSecondStep = activeStep === 1;
 

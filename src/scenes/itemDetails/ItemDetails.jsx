@@ -18,12 +18,11 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { shades } from "../../theme";
 import { addToCart } from "../../state";
-import { useDispatch } from "react-redux";
 import { products } from "../../data/products";
 import { Link } from "react-router-dom";
 
 const ItemDetails = () => {
-  const dispatch = useDispatch();
+  
   const { itemId } = useParams();
   const [value, setValue] = useState("description");
   const [count, setCount] = useState(1);
@@ -169,16 +168,12 @@ const ItemDetails = () => {
                 color="primary"
                 sx={{ borderRadius: 0, minWidth: 160, px: 3 }}
                 onClick={() =>
-                  dispatch(
-                    addToCart({
-                     item: {
-                        ...item,
-                        count,
-                        // include a single image property for the cart UI (use currently selected big image)
-                        image: selectedImage ?? item?.images?.[0] ?? null,
-                      },
-                    })
-                  )
+                  addToCart({
+                    ...item,
+                    count,
+                    // include a single image property for the cart UI (use currently selected big image)
+                    image: selectedImage ?? item?.images?.[0] ?? null,
+                  })
                 }
               >
                 Add to cart

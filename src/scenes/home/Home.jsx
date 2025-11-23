@@ -1,4 +1,4 @@
-import { Box, Alert } from "@mui/material";
+import { Box } from "@mui/material";
 import ShoppingList from "./ShoppingList";
 import Subscribe from "./Subscribe";
 import MainCarousel from "./MainCarousel";

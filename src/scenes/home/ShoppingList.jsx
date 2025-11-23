@@ -5,14 +5,13 @@ import Box from "@mui/material/Box";
 import Item from "../../components/Item";
 import { Typography } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useDispatch, useSelector } from "react-redux";
-import { setItems } from "../../state";
+import { setItems, useCartStore } from "../../state";
 import { products } from "../../data/products";
 
 const ShoppingList = () => {
-  const dispatch = useDispatch();
+  // using Zustand store
   const [value, setValue] = useState("all");
-  const items = useSelector((state) => state.cart.items);
+  const items = useCartStore((state) => state.items);
   const breakPoint = useMediaQuery("(min-width:600px)");
 
   const handleChange = (event, newValue) => {
@@ -21,8 +20,8 @@ const ShoppingList = () => {
 
   useEffect(() => {
     // Load static products data
-    dispatch(setItems(products));
-  }, [dispatch]);
+    setItems(products);
+  }, []);
 
   const accessoriesItems = items.filter((item) => item.category === "accessories");
   const bagsItems = items.filter((item) => item.category === "bags");

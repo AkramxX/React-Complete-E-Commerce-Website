@@ -1,5 +1,4 @@
 import { Box, Button, Divider, IconButton, Typography } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -10,6 +9,7 @@ import {
   increaseCount,
   removeFromCart,
   setIsCartOpen,
+  useCartStore,
 } from "../../state";
 import { useNavigate } from "react-router-dom";
 
@@ -21,9 +21,8 @@ const FlexBox = styled(Box)`
 
 const CartMenu = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart.cart);
-  const isCartOpen = useSelector((state) => state.cart.isCartOpen);
+  const cart = useCartStore((state) => state.cart);
+  const isCartOpen = useCartStore((state) => state.isCartOpen);
 
   const totalPrice = cart.reduce((total, item) => {
     return total + item.count * item.price;
@@ -53,7 +52,7 @@ const CartMenu = () => {
           {/* HEADER */}
           <FlexBox mb="15px">
             <Typography variant="h3">SHOPPING BAG ({cart.length})</Typography>
-            <IconButton onClick={() => dispatch(setIsCartOpen({}))}>
+            <IconButton onClick={() => setIsCartOpen()}>
               <CloseIcon />
             </IconButton>
           </FlexBox>
@@ -78,9 +77,7 @@ const CartMenu = () => {
                         {item.name}
                       </Typography>
                       <IconButton
-                        onClick={() =>
-                          dispatch(removeFromCart({ id: item.id }))
-                        }
+                        onClick={() => removeFromCart(item.id)}
                       >
                         <CloseIcon />
                       </IconButton>
@@ -93,17 +90,13 @@ const CartMenu = () => {
                         border={`1.5px solid ${shades.neutral[500]}`}
                       >
                         <IconButton
-                          onClick={() =>
-                            dispatch(decreaseCount({ id: item.id }))
-                          }
+                          onClick={() => decreaseCount(item.id)}
                         >
                           <RemoveIcon />
                         </IconButton>
                         <Typography>{item.count}</Typography>
                         <IconButton
-                          onClick={() =>
-                            dispatch(increaseCount({ id: item.id }))
-                          }
+                          onClick={() => increaseCount(item.id)}
                         >
                           <AddIcon />
                         </IconButton>
@@ -125,7 +118,7 @@ const CartMenu = () => {
               <Typography fontWeight="bold">SUBTOTAL</Typography>
               <Typography fontWeight="bold">${(totalPrice / 100).toFixed(2)}</Typography>
             </FlexBox>
-            <Button
+                <Button
               
               sx={{
                 backgroundColor: shades.primary[400],
@@ -138,7 +131,7 @@ const CartMenu = () => {
               }}
               onClick={() => {
                 navigate("/checkout");
-                dispatch(setIsCartOpen({}));
+                setIsCartOpen();
               }}
               disabled={cart.length === 0}
             >
