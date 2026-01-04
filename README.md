@@ -11,7 +11,7 @@ A fully-featured, responsive e-commerce application built with React. Features i
 - 💳 **Multi-Step Checkout** - Professional checkout flow with Formik validation 
 - 📱 **Fully Responsive** - Optimized for desktop, tablet, and mobile devices
 - 🎨 **Modern UI/UX** - Material-UI components with smooth animations and carousels
-- ⚡ **Zustand State Management** - Centralized state for cart and products with Zustand
+- ⚡ **Global State Management** - Centralized state for cart and products with Zustand
 
 ---
 
